@@ -7,7 +7,7 @@ export const login = (data) => dispatch => {
     
     // console.log('Data going for login :', data)
     console.log('React app api url', process.env.REACT_APP_API_URL)
-    axios.post(`https://nodetodowithusers.herokuapp.com/user/login`, data)
+    axios.post(`${process.env.REACT_APP_API_URL}user/login`, data)
     // axios.post('http://192.168.100.44:3000/user/login', data)
     .then(response => {
             console.log("Response login for token: ", response)
