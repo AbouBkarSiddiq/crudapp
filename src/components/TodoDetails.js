@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { getTodoDetail } from '../redux/actions/todoActions'
 import { deleteTodo } from '../redux/actions/todoActions'
 import { connect } from 'react-redux'
-import { apiUrl } from '../constants';
+// import { apiUrl } from '../constants';
+require('dotenv').config();
 
 class TodoDetails extends React.Component {
 
@@ -26,23 +27,39 @@ class TodoDetails extends React.Component {
     }
 
     render() {
-        console.log('todo deatails image:', this.props.todo.image)
+        console.log('todo deatails array:', this.props.todo)
         return (
             <div className="blog-details">
-                {this.props.todo && (
-                    <article>
+                {
+                    this.props.todo ? (
+                        <article>
                         <h2>{this.props.todo.title}</h2>
                         <p>{this.props.todo.description}</p>
                         <h2>Todo Status:{this.props.todo.isComplete ? 'Completed' : 'Not Completed'}</h2>
                         <div >
-                            <img style={{ width: '300px', height: '300px'}} src={`${apiUrl}uploads/${this.props.todo.image}`} alt="todo"/>
+                            <img style={{ width: '300px', height: '300px'}} src={`${process.env.REACT_APP_API_URL}uploads/${this.props.todo.image}`} alt="todo"/>
                         </div>
                         <button onClick={this.handleDelete}>Delete</button>
                         <Link to={`edit-todo/${this.props.todo._id}`}>
                             <button onClick={this.handleEdit} >Edit</button>
                         </Link>
                     </article>
-                )}
+                    ) : null
+                }
+                {/* {this.props.todo? (
+                    <article>
+                        <h2>{this.props.todo.title}</h2>
+                        <p>{this.props.todo.description}</p>
+                        <h2>Todo Status:{this.props.todo.isComplete ? 'Completed' : 'Not Completed'}</h2>
+                        <div >
+                            <img style={{ width: '300px', height: '300px'}} src={`${process.env.REACT_APP_API_URL}uploads/${this.props.todo.image}`} alt="todo"/>
+                        </div>
+                        <button onClick={this.handleDelete}>Delete</button>
+                        <Link to={`edit-todo/${this.props.todo._id}`}>
+                            <button onClick={this.handleEdit} >Edit</button>
+                        </Link>
+                    </article>
+                ) : <h2>Not todo found</h2>} */}
 
             </div>
         );

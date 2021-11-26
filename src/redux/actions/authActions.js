@@ -1,11 +1,13 @@
 import axios from "axios";
 import { LOGIN, LOGIN_LOADING, REGISTER, REGISTER_LOADING } from "../constants";
+require('dotenv').config();
 
 export const login = (data) => dispatch => {
     dispatch({ type: LOGIN_LOADING, payload: true });
     
     console.log('Data going for login :', data)
-    axios.post('http://192.168.100.44:3000/user/login', data)
+    axios.post(`${process.env.REACT_APP_API_URL}user/login`, data)
+    // axios.post('http://192.168.100.44:3000/user/login', data)
     .then(response => {
             console.log("Response login for token: ", response)
             localStorage.setItem('userId', response.data.data._id);
@@ -27,7 +29,8 @@ export const login = (data) => dispatch => {
 
 export const register = (data) => dispatch => {
     dispatch({ type: REGISTER_LOADING, payload: true });
-    axios.post('http://192.168.100.44:3000/user/register', data)
+    axios.post(`${process.env.REACT_APP_API_URL}user/register`, data)
+    // axios.post('http://192.168.100.44:3000/user/register', data)
         .then(response => {
             console.log("Response register: ", response.data.data)
             dispatch({
