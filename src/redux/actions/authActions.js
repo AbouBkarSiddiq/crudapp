@@ -5,8 +5,9 @@ require('dotenv').config();
 export const login = (data) => dispatch => {
     dispatch({ type: LOGIN_LOADING, payload: true });
     
-    console.log('Data going for login :', data)
-    axios.post(`${process.env.REACT_APP_API_URL}user/login`, data)
+    // console.log('Data going for login :', data)
+    console.log('React app api url', process.env.REACT_APP_API_URL)
+    axios.post(`https://nodetodowithusers.herokuapp.com/user/login`, data)
     // axios.post('http://192.168.100.44:3000/user/login', data)
     .then(response => {
             console.log("Response login for token: ", response)
