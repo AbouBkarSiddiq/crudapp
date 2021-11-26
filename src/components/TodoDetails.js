@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { getTodoDetail } from '../redux/actions/todoActions'
 import { deleteTodo } from '../redux/actions/todoActions'
 import { connect } from 'react-redux'
-const dotenv = require('dotenv')
 // import { apiUrl } from '../constants';
 require('dotenv').config();
 
