@@ -2,7 +2,6 @@ import React from 'react';
 import { createTodo } from '../redux/actions/todoActions'
 import { connect } from 'react-redux'
 
-
 class Create extends React.Component {
 
     state = {
@@ -10,19 +9,24 @@ class Create extends React.Component {
         description: null,
         isComplete: false,
         image: '',
+        preview: '',
         isLoading: false
     }
-    
+
     handleChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         })
-        
-        if(e.target.files) {
-        this.setState({
-            image: e.target.files
-        })
-    }
+
+        if (e.target.files) {
+            console.log('Image at create:', e.target.files[0])
+            this.setState({
+                image: e.target.files[0],
+            })
+            this.setState({
+                preview: URL.createObjectURL(e.target.files[0]),
+            })
+        }
     }
 
     handleSubmit = (e) => {
@@ -31,18 +35,13 @@ class Create extends React.Component {
         formData.append('title', this.state.title);
         formData.append('description', this.state.description);
         formData.append('isComplete', this.state.isComplete);
-        formData.append('image', this.state.image[0]);
-
-        // const data = {
-        //     title: this.state.title,
-        //     description: this.state.description,
-        //     isComplete: this.state.isComplete,
-        //     image: this.state.image  
-
-        // }
-        this.props.createTodo(formData)     
+        formData.append('image', this.state.image);
+        this.props.createTodo(formData)
+// to console formdata
+        for (var pair of formData.entries()) {
+            console.log(pair[0]+ ' - ' + pair[1]); 
+        }
         this.props.history.push('/home')
-        // console.log('Create form data:', data)
     }
 
 
@@ -80,14 +79,18 @@ class Create extends React.Component {
                     </select>
                     <label>Choose an image:</label>
 
-                    <input 
+                    <input
                         type="file"
                         // name="image"
-                        // value={this.state.image}
                         accept="image/x-png,image/jpg,image/jpeg, image/png,"
                         onChange={this.handleChange}
 
                     />
+                    {
+                        this.state.image ? <div>
+                            <img style={{ width: '300px', height: '300px' }} src={this.state.preview} alt="todo" />
+                        </div> : null
+                    }
                     {!this.state.isLoading && <button>Add Todo</button>}
                     {this.state.isLoading && <button>Loading...</button>}
 
@@ -101,8 +104,8 @@ class Create extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        createTodo: (data) => (
-            dispatch(createTodo(data))
+        createTodo: (formData) => (
+            dispatch(createTodo(formData))
         )
     }
 

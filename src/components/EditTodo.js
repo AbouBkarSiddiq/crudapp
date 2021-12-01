@@ -4,9 +4,10 @@
 // import { getTodoDataToUpdate } from '../redux/actions/todoActions';
 
 // class EditTodo extends React.Component {
-    
+
 //     state = {
-//         todo: {}
+//         todo: {},
+//         image: null
 //     }
 
 //     // handleChange = ({ target }) => {
@@ -18,23 +19,27 @@
 //     //     });
 //     // };
 //     handleChange = (e) => {
+//         console.log('Todo at Edit:', this.props.todo)
 //         this.setState({
+//             todo: this.props.todo,
 //             ...this.state.todo, [e.target.name]: e.target.value 
-//         })
-        
+//         })   
+
+//     } 
+//     handleFileChange = (e) => {
 //         if(e.target.files) {
 //             this.setState({
 //                 image: e.target.files
 //             })
 //         }
-//     } 
+//     }
 
 //     componentDidMount() {
 //         const id = this.props.match.params.id;
 //         // if (!this.props.todo?.length) {
 //             this.props.getTodoDataToUpdate(id);
 //              this.setState({
-
+//                 // ...todo, this.props.todo
 //              })
 //         // }
 //     }
@@ -56,23 +61,23 @@
 //                         name="title"
 //                         type="text"
 //                         required
-//                         value={this.props.todo.title}
+//                         value={this.state.todo.title}
 //                         onChange={this.handleChange}
 //                     />
 //                     <label>Todo Description:</label>
 //                     <textarea
 //                         name="description"
 //                         required
-//                         value={this.props.todo.description}
+//                         value={this.state.todo.description}
 //                         onChange={this.handleChange}
 //                     >
 //                     </textarea>
 //                     <label>Todo Status:</label>
 //                     <select
 //                         name="isComplete"
-//                         value={this.props.todo.isComplete}
+//                         value={this.state.todo.isComplete}
 //                         onChange={this.handleChange}
-    
+
 //                     >
 //                         <option value="true">Completed</option>
 //                         <option value="false">Not completed</option>
@@ -84,11 +89,11 @@
 //                         // name="image"
 //                         // value={this.state.image}
 //                         accept="image/x-png,image/jpg,image/jpeg, image/png,"
-//                         onChange={this.handleChange}
+//                         onChange={this.handleFileChange}
 
 //                     />
 //                     <button>Update Todo</button>
-    
+
 //                 </form>
 //             </div>
 //         );;
@@ -115,8 +120,8 @@
 // export default connect(mapStateToProps, mapDispatchToProps)(EditTodo);
 
 import { updateTodo } from '../redux/actions/todoActions'
-import {useParams , useHistory} from 'react-router-dom'
-import {useState, useEffect} from 'react'
+import { useParams, useHistory } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { getTodoDataToUpdate } from '../redux/actions/todoActions';
 
@@ -124,56 +129,53 @@ const EditTodo = () => {
 
     const { id } = useParams();
     const history = useHistory()
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
     let res = useSelector((state) => state.todoReducer.todo);
-    let response = useSelector((state) => state.todoReducer.todos);
-    console.log('Data coming from api for update todo:', response)
-    const [data, setData] = useState({})
-    // console.log("Blog data at edit:", data)
+    // console.log('Response of single todo at Edit:', res)
+    const [todo, setTodo] = useState({})
+    // const [image, setImage] = useState('')
+    const [preview, setPreview] = useState('')
 
     const handleChange = ({ target }) => {
         console.log('Target:', target)
         const { name, value } = target;
-        setData({ ...data, [name]: value });
+        setTodo({
+            ...todo, [name]: value,
+        });
+    };
+
+    const handleFileChange = (e) => {
+        let files = e.target.files[0]
+        if (files) {
+            console.log('Files', files)
+            // setImage(files)
+            // console.log("Try to update image::::", setImage(files))
+            setTodo({
+                ...todo, image : files,
+            });
+            setPreview(URL.createObjectURL(e.target.files[0]))
+        }
     };
 
     useEffect(() => {
         dispatch(getTodoDataToUpdate(id))
-        setData(res)
-        // axios('http://192.168.100.44:3000/todo/' + id)
-        //     .then((response) => {
-        //         let data = response.data.data
-        //         console.log('Data coming from bloglist, title', data)
-        //         setData(data)
-        //         return data
-        //     }).catch((error) => {
-        //         console.log("Error in catch body.", error)
-        //     })
-
+        setTodo(res)
     }, [])
 
     const handleUpdate = (e) => {
         e.preventDefault()
-        console.log('Updated data:', data)
-        dispatch(updateTodo(id, data))
+        const formData = new FormData();
+        formData.append('title', todo.title);
+        formData.append('description', todo.description);
+        formData.append('isComplete', todo.isComplete);
+        formData.append('image', todo.image);
+        for (var pair of formData.entries()) {
+            console.log(pair[0]+ ' - ' + pair[1]); 
+        }
+        // console.log('Updated todo data:', todo)
+        dispatch(updateTodo(id, formData))
         history.push('/home')
-        // axios.put('http://192.168.100.44:3000/todo/' + id, {
-        //     // method: 'PUT',
-        //     // headers: { 'Content-Type': 'application/json' },
-        //     // body: JSON.stringify({
-        //         ...data
-        //         // id: id,
-        //         // title: data.title,
-        //         // body: data.body,
-        //         // author: data.author
-        //     // }),
-
-        // })
-        //     .then(() => {
-        //         history.push('/')
-        //     })
     }
-
 
     return (
         <div className="create">
@@ -184,40 +186,43 @@ const EditTodo = () => {
                     name="title"
                     type="text"
                     required
-                    value={data.title}
+                    value={todo.title}
                     onChange={handleChange}
                 />
                 <label>Todo Description:</label>
                 <textarea
                     name="description"
                     required
-                    value={data.description}
+                    value={todo.description}
                     onChange={handleChange}
                 >
                 </textarea>
                 <label>Todo Status:</label>
                 <select
                     name="isComplete"
-                    value={data.isComplete}
+                    value={todo.isComplete}
                     onChange={handleChange}
 
                 >
                     <option value="true">Completed</option>
                     <option value="false">Not completed</option>
                 </select>
-                <label>Choose an image:</label>
+                {
+                    preview ? <div>
+                        <img style={{ width: '300px', height: '300px' }} src={preview} alt="todo" />
+                    </div> : !preview ? <div>
+                        <img style={{ width: '300px', height: '300px' }} src={todo.image} alt="todo" />
+                    </div> : null
+                }
+                <label>Choose an image to update:</label>
+                <input
+                    type="file"
+                    name="image"
+                    accept="image/x-png,image/jpg,image/jpeg, image/png,"
+                    onChange={handleFileChange}
 
-                     <input 
-                        type="file"
-                        // name="image"
-                        value={data.image}
-                        // value={this.state.image}
-                        accept="image/x-png,image/jpg,image/jpeg, image/png,"
-                        onChange={handleChange}
-
-                     />
+                />
                 <button>Update Todo</button>
-
             </form>
         </div>
     );

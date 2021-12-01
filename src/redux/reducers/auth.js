@@ -1,7 +1,8 @@
-import { LOGIN, LOGIN_LOADING, REGISTER, REGISTER_LOADING } from "../constants";
+import { LOGIN, FETCH_USER, FETCH_LOADING, LOGIN_LOADING, REGISTER, REGISTER_LOADING } from "../constants";
 
 const initState = {
     user: null,
+    isFetchingUser: true,
     isLoading: false,
 }
 
@@ -13,12 +14,26 @@ export default function authReducer(state=initState, action) {
                 user: action.payload,
                 isLoading: false,
             };
+        
+            case FETCH_USER:
+                return {
+                    ...state,
+                    user: action.payload,
+                    isFetchingUser: false,
+                };
+
+            case FETCH_LOADING:
+                return {
+                    ...state,
+                    isFetchingUser: action.payload
+                };
     
         case LOGIN_LOADING:
             return {
                 ...state,
                 isLoading: action.payload
             }
+
             case REGISTER:
                 return {
                     ...state,

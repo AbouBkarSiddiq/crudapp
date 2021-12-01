@@ -1,7 +1,6 @@
 import axios from "axios";
 
 import { GET_TODOS, SET_IS_FETCHING_TODOS, GET_TODO_DETAIL, DELETE_TODO, CREATE_TODO, UPDATE_TODO, GET_TODO_DATA_TO_UPDATE } from "../constants/index";
-// import { apiUrl } from "../../constants/index";
 require('dotenv').config();
 
 const setIsFetchingTodos = (status) => {
@@ -41,10 +40,10 @@ export const getTodos = (userId, token) => async (dispatch) => {
     
 }
 
-
 export const getTodoDetail = (id) => async (dispatch) => {
-
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}todo`, id);
+    console.log('Id for get todo detail:', id)
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}todo/${id}`);
+    console.log('Get todo details action:', res)
     // const res = await axios.get(`${apiUrl}todo/${id}`);
 
     if (res.status === 200) {
@@ -60,9 +59,7 @@ export const getTodoDetail = (id) => async (dispatch) => {
 
 export const deleteTodo = (id) => async (dispatch) => {
     
-    // const res = await axios.delete('http://192.168.100.44:3000/todo/' + id);
-    const res = await axios.delete(`${process.env.REACT_APP_API_URL}todo/`, id);
-    // const res = await axios.delete(`${apiUrl}todo/${id}`);
+    const res = await axios.delete(`${process.env.REACT_APP_API_URL}todo/${id}`);
     console.log('Response from api for single todo:', res.data.data)
     // dispatch(setIsFetchingTodos(true));
     if (res.status === 200) {
@@ -76,12 +73,10 @@ export const deleteTodo = (id) => async (dispatch) => {
 }
 
 export const createTodo = (formData) => async (dispatch) => {
-
-    const res = await axios.post(`${process.env.REACT_APP_API_URL}todo/`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-    });
+    const headers = {
+        'Content-Type': 'multipart/form-data'
+      }
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}todo/`, formData, {headers});
     console.log('Response from api for newly created todo:', res.data.data)
 
     if (res.status === 200) {
@@ -96,9 +91,7 @@ export const createTodo = (formData) => async (dispatch) => {
 
 export const getTodoDataToUpdate = (id) => async (dispatch) => {
 
-    // const res = await axios.get(`${apiUrl}todo/${id}`);
-    // const res = await axios.get('http://192.168.100.44:3000/todo/' + id);
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}todo/`, id);
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}todo/${id}`);
 
     console.log('Response from api for single todo to be update:', res)
     // dispatch(setIsFetchingTodos(true));
@@ -112,12 +105,11 @@ export const getTodoDataToUpdate = (id) => async (dispatch) => {
     }
 }
 
-export const updateTodo = (id, data) => async (dispatch) => {
-    console.log('Data coming from edittodo comp:', data)
-    
-    const res = await axios.put(`${process.env.REACT_APP_API_URL}todo/${id}`, data);
-    // const res = await axios.put('http://192.168.100.44:3000/todo/' + id, data);
-    console.log('Response from api for single todo to be update:', res.data.data)
+export const updateTodo = (id, formData) => async (dispatch) => {
+    const headers = {
+        'Content-Type': 'multipart/form-data'
+      }
+    const res = await axios.put(`${process.env.REACT_APP_API_URL}todo/${id}`, formData, {headers});
     // dispatch(setIsFetchingTodos(true));
     if (res.status === 200) {
         dispatch({

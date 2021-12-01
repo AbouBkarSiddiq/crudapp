@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { login } from '../../redux/actions/authActions'
 
@@ -30,7 +31,10 @@ class Login extends React.Component {
             password: this.state.password,
 
         }
-        this.props.login(data)
+        this.props.login(data);
+        console.log("this gets executed...")
+        this.props.history.push('/home');
+
         // const userId = localStorage.getItem('userId')
         // if (userId) {
         //     console.log('component did mount works')
@@ -82,7 +86,7 @@ const mapDispatchToProps = (dispatch) => {
 
 }
 
-export default connect(null, mapDispatchToProps)(Login);
+export default withRouter(connect(null, mapDispatchToProps)(Login));
 
 
 

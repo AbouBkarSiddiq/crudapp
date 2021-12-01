@@ -23,7 +23,7 @@ const todoReducer = (state = initialState, action) => {
       };
 
       case GET_TODO_DETAIL:
-        // console.log('data at reducer:', state)
+        console.log('data at reducer:', action.payload)
         return {
         ...state,
         isFetching: false,
@@ -31,7 +31,6 @@ const todoReducer = (state = initialState, action) => {
       };
 
       case DELETE_TODO:
-        // console.log('data at reducer:', state)
         return {
         ...state,
         isFetching: false,

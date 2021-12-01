@@ -10,37 +10,33 @@ class Home extends React.Component {
     }
 
     componentDidMount() {
-        // const userId = localStorage.getItem('userId')
-        // const token = localStorage.getItem('token')
-        if (!this.props.todos?.length) {
-            this.props.getTodos();
-        }
+
+        this.props.getTodos();
+        this.setState({
+            todos : this.props.todos,
+            // todos: [],
+        })
+        
     }
 
-    // static getDerivedStateFromProps(props, state) {
-    // }
-
-    // static getDerivedStateFromProps(props, state) {
-    //     if (props.hist) {
-    //         if (props.match.url !== props.hist.url) {
-    //             props.changematch();
-    //             props.history.push(props.hist.url);
-    //         }
-    //     }
-    //     const { todos } = props
-    //     if (JSON.stringify(todos) !== JSON.stringify(state.todos)) {
-    //         state.todos = todos
-    //     }
+    static getDerivedStateFromProps(props, state) {
+        const { todos } = props
+        console.log('Props', props)
+        if (JSON.stringify(todos) !== JSON.stringify(state.todos)) {
+            state.todos = todos
+        }
         
-    //     return state
-    // }
+        return state
+    }
 
     render() {
         return (
             <div className="home">
-                {/* {error && <div>{error.message}</div>} */}
-                {/* {isLoading ? <div>Loading...</div> : ''} */}
-                {this.props.todos?.length && this.props.todos ? < TodoList todos={this.props.todos} title="All Todos" /> : <div>Loading...</div>}
+                {
+                this.state.todos?.length && this.state.todos ? 
+                < TodoList todos={this.state.todos} title="All Todos" /> 
+                : <div>Loading...</div>
+                }
             </div>
         );
     }
