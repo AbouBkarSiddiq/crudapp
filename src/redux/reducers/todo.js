@@ -34,13 +34,13 @@ const todoReducer = (state = initialState, action) => {
         return {
         ...state,
         isFetching: false,
-        todos: action.payload,
+        todo: action.payload,
       };
       case CREATE_TODO:
         return {
         ...state,
         isFetching: false,
-        todos: action.payload,
+        todo: action.payload,
       };
       case GET_TODO_DATA_TO_UPDATE:
         return {
@@ -52,7 +52,7 @@ const todoReducer = (state = initialState, action) => {
         return {
         ...state,
         isFetching: false,
-        todos: action.payload,
+        todo: action.payload,
       };
     default:
       return state;

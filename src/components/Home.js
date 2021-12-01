@@ -35,7 +35,7 @@ class Home extends React.Component {
                 {
                 this.state.todos?.length && this.state.todos ? 
                 < TodoList todos={this.state.todos} title="All Todos" /> 
-                : <div>Loading...</div>
+                : null // : <div>Loading...</div>
                 }
             </div>
         );

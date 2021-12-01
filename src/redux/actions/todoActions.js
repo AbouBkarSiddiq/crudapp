@@ -1,5 +1,4 @@
 import axios from "axios";
-
 import { GET_TODOS, SET_IS_FETCHING_TODOS, GET_TODO_DETAIL, DELETE_TODO, CREATE_TODO, UPDATE_TODO, GET_TODO_DATA_TO_UPDATE } from "../constants/index";
 require('dotenv').config();
 
@@ -12,7 +11,7 @@ const setIsFetchingTodos = (status) => {
 
 export const getTodos = (userId, token) => async (dispatch) => {
   try {
-    dispatch(setIsFetchingTodos(true)); 
+    // dispatch(setIsFetchingTodos(true)); 
 
     // const config = {
     //     headers: { Authorization: `Bearer ${token}` }
@@ -26,16 +25,16 @@ export const getTodos = (userId, token) => async (dispatch) => {
     if (res.status === 200) {
         dispatch({
             type: GET_TODOS,
-            isFetching: false,
+            // isFetching: false,
             payload: res.data.data,
         });
     } else {
-        dispatch(setIsFetchingTodos(false));
+        // dispatch(setIsFetchingTodos(false));
 
     }
       
   } catch (error) {
-    dispatch(setIsFetchingTodos(false));
+    // dispatch(setIsFetchingTodos(false));
   }
     
 }
@@ -57,7 +56,8 @@ export const getTodoDetail = (id) => async (dispatch) => {
     }
 }
 
-export const deleteTodo = (id) => async (dispatch) => {
+export const deleteTodo = (id, ownProps) => async (dispatch) => {
+    console.log('ownProps at delete todo:', ownProps)
     
     const res = await axios.delete(`${process.env.REACT_APP_API_URL}todo/${id}`);
     console.log('Response from api for single todo:', res.data.data)
@@ -68,11 +68,13 @@ export const deleteTodo = (id) => async (dispatch) => {
             // isFetching: false,
             payload: res.data.data
         });
+        ownProps.history.push('/home')
     } else {
     }
 }
 
-export const createTodo = (formData) => async (dispatch) => {
+export const createTodo = (formData, ownProps) => async (dispatch) => {
+    console.log('Own Props:', ownProps);
     const headers = {
         'Content-Type': 'multipart/form-data'
       }
@@ -83,8 +85,10 @@ export const createTodo = (formData) => async (dispatch) => {
         dispatch({
             type: CREATE_TODO,
             // isFetching: false,
-            payload: res.data.data
+            payload: res.data.data,
+            // ownProps.push('/')
         });
+        ownProps.history.push('/home')
     } else {
     }
 }

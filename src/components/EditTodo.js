@@ -7,51 +7,56 @@
 
 //     state = {
 //         todo: {},
-//         image: null
+//         preview:'',
 //     }
 
-//     // handleChange = ({ target }) => {
-//     //     console.log('Target:', target)
-//     //     const { name, value } = target;
-//     //     this.setState({
-//     //         ...this.props.todo,
-//     //         [name]: value
-//     //     });
-//     // };
-//     handleChange = (e) => {
-//         console.log('Todo at Edit:', this.props.todo)
+//     handleChange = ({ target }) => {
+//         console.log('Target:', target)
+//         const { name, value } = target;
 //         this.setState({
-//             todo: this.props.todo,
-//             ...this.state.todo, [e.target.name]: e.target.value 
-//         })   
-
-//     } 
+//             ...todo, [name]: value
+//         })
+        
+//     }
 //     handleFileChange = (e) => {
-//         if(e.target.files) {
+//         let files = e.target.files[0]
+//         if (files) {
 //             this.setState({
-//                 image: e.target.files
+//                 ...this.state.todo, image: files,
+//             })
+//             this.setState({
+//                 preview: URL.createObjectURL(e.target.files[0]),
 //             })
 //         }
 //     }
-
+    
 //     componentDidMount() {
 //         const id = this.props.match.params.id;
-//         // if (!this.props.todo?.length) {
-//             this.props.getTodoDataToUpdate(id);
-//              this.setState({
-//                 // ...todo, this.props.todo
-//              })
-//         // }
+//         this.props.getTodoDataToUpdate(id);
+//         console.log('This.props.todo', this.props.todo)
+//         console.log('This.state.todo:,', {...this.state.todo})
+//         this.setState({
+//             todo: this.props.todo
+//         })
 //     }
+  
 
 //     handleUpdate = (e) => {
 //         e.preventDefault()
 //         const id = this.props.match.params.id;
-//         updateTodo(id, this.props.todo)
+//         const formData = new FormData();
+//         formData.append('title', this.state.todo.title);
+//         formData.append('description', this.state.todo.description);
+//         formData.append('isComplete', this.state.todo.isComplete);
+//         formData.append('image', this.state.todo.image);
+//         for (var pair of formData.entries()) {
+//             console.log(pair[0]+ ' - ' + pair[1]); 
+//         }
+//         updateTodo(id, formData);
 //         this.props.history.push('/home')
 //     }
 
-//     render() { 
+//     render() {
 //         return (
 //             <div className="create">
 //                 <h2>Update Todo</h2>
@@ -82,18 +87,22 @@
 //                         <option value="true">Completed</option>
 //                         <option value="false">Not completed</option>
 //                     </select>
+//                     {
+//                     this.state.preview ? <div>
+//                         <img style={{ width: '300px', height: '300px' }} src={this.state.preview} alt="todo" />
+//                     </div> : !this.state.preview ? <div>
+//                         <img style={{ width: '300px', height: '300px' }} src={this.state.todo.image} alt="todo" />
+//                     </div> : null
+//                     }
 //                     <label>Choose an image:</label>
 
-//                     <input 
+//                     <input
 //                         type="file"
-//                         // name="image"
-//                         // value={this.state.image}
+//                         name="image"
 //                         accept="image/x-png,image/jpg,image/jpeg, image/png,"
 //                         onChange={this.handleFileChange}
-
 //                     />
 //                     <button>Update Todo</button>
-
 //                 </form>
 //             </div>
 //         );;
@@ -118,6 +127,7 @@
 // };
 
 // export default connect(mapStateToProps, mapDispatchToProps)(EditTodo);
+
 
 import { updateTodo } from '../redux/actions/todoActions'
 import { useParams, useHistory } from 'react-router-dom'
@@ -174,7 +184,7 @@ const EditTodo = () => {
         }
         // console.log('Updated todo data:', todo)
         dispatch(updateTodo(id, formData))
-        history.push('/home')
+        // history.push('/home')
     }
 
     return (

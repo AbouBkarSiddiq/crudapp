@@ -33,8 +33,8 @@ class TodoDetails extends React.Component {
     handleDelete = () => {
         const id = this.props.match.params.id;
         console.log('Id of todo for delete action:', id)
-        this.props.deleteTodo(id)
-        this.props.history.push('/home')
+        this.props.deleteTodo(id, this.props)
+        // this.props.history.push('/home')
     }
     
     handleEdit = () => {
@@ -42,7 +42,7 @@ class TodoDetails extends React.Component {
     }
     
     render() {
-        console.log('Todo state at todo details:', this.state.todo.image)
+        // console.log('Todo state at todo details:', this.state.todo.image)
         return (
             <div className="blog-details">
                 {
@@ -66,13 +66,13 @@ class TodoDetails extends React.Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         getTodoDetail: (id) => (
             dispatch(getTodoDetail(id))
         ),
-        deleteTodo: (id) => (
-            dispatch(deleteTodo(id))
+        deleteTodo: (id, ownProps) => (
+            dispatch(deleteTodo(id, ownProps))
         )    
     }
 }

@@ -13,6 +13,16 @@ class Create extends React.Component {
         isLoading: false
     }
 
+    // static getDerivedStateFromProps(props, state) {
+    //     const { todo } = props
+    //     console.log('Props', props)
+    //     if (JSON.stringify(todo) !== JSON.stringify(state)) {
+    //         state = todo
+    //     }
+        
+    //     return state
+    // }
+
     handleChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
@@ -36,12 +46,11 @@ class Create extends React.Component {
         formData.append('description', this.state.description);
         formData.append('isComplete', this.state.isComplete);
         formData.append('image', this.state.image);
-        this.props.createTodo(formData)
-// to console formdata
-        for (var pair of formData.entries()) {
-            console.log(pair[0]+ ' - ' + pair[1]); 
-        }
-        this.props.history.push('/home')
+        this.props.createTodo(formData, this.props)
+        // for (var pair of formData.entries()) {
+        //     console.log(pair[0]+ ' - ' + pair[1]); 
+        // }
+        // this.props.history.push('/home')
     }
 
 
@@ -102,10 +111,10 @@ class Create extends React.Component {
 
 
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        createTodo: (formData) => (
-            dispatch(createTodo(formData))
+        createTodo: (formData, ownProps) => (
+            dispatch(createTodo(formData, ownProps))
         )
     }
 
