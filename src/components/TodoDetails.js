@@ -20,21 +20,11 @@ class TodoDetails extends React.Component {
             todo: this.props.todo
         })
     }
-    static getDerivedStateFromProps(props, state) {
-        const { todo } = props
-        console.log('Props for single todo:', props)
-        if (JSON.stringify(todo) !== JSON.stringify(state.todo)) {
-            state.todo = todo
-        }
-        
-        return state
-    }
     
     handleDelete = () => {
         const id = this.props.match.params.id;
         console.log('Id of todo for delete action:', id)
         this.props.deleteTodo(id, this.props)
-        // this.props.history.push('/home')
     }
     
     handleEdit = () => {
@@ -66,7 +56,7 @@ class TodoDetails extends React.Component {
     }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         getTodoDetail: (id) => (
             dispatch(getTodoDetail(id))
@@ -157,10 +147,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(TodoDetails);
 //                     </Link>
 //                 </article>
 //             )}
-
 //         </div>
 //     )
 // }
-
 // export default TodoDetails;
 

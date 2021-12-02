@@ -10,13 +10,10 @@ class Home extends React.Component {
     }
 
     componentDidMount() {
-
         this.props.getTodos();
         this.setState({
             todos : this.props.todos,
-            // todos: [],
-        })
-        
+        })      
     }
 
     static getDerivedStateFromProps(props, state) {
@@ -24,8 +21,7 @@ class Home extends React.Component {
         console.log('Props', props)
         if (JSON.stringify(todos) !== JSON.stringify(state.todos)) {
             state.todos = todos
-        }
-        
+        }  
         return state
     }
 
@@ -35,7 +31,7 @@ class Home extends React.Component {
                 {
                 this.state.todos?.length && this.state.todos ? 
                 < TodoList todos={this.state.todos} title="All Todos" /> 
-                : null // : <div>Loading...</div>
+                : <div>Loading...</div>
                 }
             </div>
         );

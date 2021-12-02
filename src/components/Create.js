@@ -13,16 +13,6 @@ class Create extends React.Component {
         isLoading: false
     }
 
-    // static getDerivedStateFromProps(props, state) {
-    //     const { todo } = props
-    //     console.log('Props', props)
-    //     if (JSON.stringify(todo) !== JSON.stringify(state)) {
-    //         state = todo
-    //     }
-        
-    //     return state
-    // }
-
     handleChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
@@ -47,12 +37,10 @@ class Create extends React.Component {
         formData.append('isComplete', this.state.isComplete);
         formData.append('image', this.state.image);
         this.props.createTodo(formData, this.props)
-        // for (var pair of formData.entries()) {
-        //     console.log(pair[0]+ ' - ' + pair[1]); 
-        // }
-        // this.props.history.push('/home')
+        for (var pair of formData.entries()) {
+            console.log(pair[0]+ ' - ' + pair[1]); 
+        }
     }
-
 
     render() {
         return (
@@ -90,7 +78,7 @@ class Create extends React.Component {
 
                     <input
                         type="file"
-                        // name="image"
+                        name="image"
                         accept="image/x-png,image/jpg,image/jpeg, image/png,"
                         onChange={this.handleChange}
 
@@ -109,9 +97,7 @@ class Create extends React.Component {
     }
 }
 
-
-
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         createTodo: (formData, ownProps) => (
             dispatch(createTodo(formData, ownProps))

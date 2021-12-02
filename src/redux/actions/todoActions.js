@@ -109,7 +109,8 @@ export const getTodoDataToUpdate = (id) => async (dispatch) => {
     }
 }
 
-export const updateTodo = (id, formData) => async (dispatch) => {
+export const updateTodo = (id, formData, ownProps) => async (dispatch) => {
+    console.log('Own props of updateTodo:', ownProps);
     const headers = {
         'Content-Type': 'multipart/form-data'
       }
@@ -121,6 +122,7 @@ export const updateTodo = (id, formData) => async (dispatch) => {
             // isFetching: false,
             payload: res.data.data
         });
+        ownProps.history.push('/home')
     } else {
     }
 }
